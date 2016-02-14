@@ -1,0 +1,44 @@
+## emscripten
+
+sudo apt-get update
+sudo apt-get install build-essential
+sudo apt-get install python2.7
+sudo apt-get install nodejs
+sudo apt-get install git-core
+sudo apt-get install default-jre
+
+mkdir myfastcomp
+cd myfastcomp
+git clone https://github.com/kripken/emscripten-fastcomp
+cd emscripten-fastcomp
+git clone https://github.com/kripken/emscripten-fastcomp-clang tools/clang
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD="X86;JSBackend" -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_TESTS=OFF -DCLANG_INCLUDE_EXAMPLES=OFF -DCLANG_INCLUDE_TESTS=OFF
+
+Obtain the number of cores: `cat /proc/cpuinfo | grep "^cpu cores" | uniq`
+Call make to build the sources, specifying the number of available cores. For example, if you have two cores, run `make -j2`
+This may take a while.
+
+cd ../../../
+git clone https://github.com/kripken/emscripten
+cd emscripten
+./emcc --help
+nano ~/.emscripten and edit LLVM_ROOT to <LLVM root>/build/bin where <LLVM root> is the path to the directory where you cloned LLVM
+
+run a basic example: `./emcc tests/hello_world.cpp`
+
+Add the following line in ~/.profile
+export EMSCRIPTEN_PATH=/data/emscripten (or whatever directory where you cloned emscripten)
+
+## CARFAC
+sudo apt-get install libeigen3-dev scons cmake libgtest-dev
+export EIGEN_PATH=/usr/include/eigen3
+export GTEST_SOURCE=/usr/src/gtest
+git clone https://github.com/google/carfac
+cd carfac
+cd cpp
+scons
+scons test
+scons --clean
+scons carfac.js

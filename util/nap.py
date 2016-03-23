@@ -3,6 +3,7 @@ import numpy as np
 from scikits.samplerate import resample
 from subprocess import call
 import csv
+import sys
 
 
 def csv_to_array(filename, delimiter=' '):
@@ -30,8 +31,11 @@ def cochlear(filename, stride, rate, db=-40, ears=1, a_1=-0.995, apply_filter=1,
         data = resample(data, float(rate) / original_rate, 'sinc_best')
     data = data * 10 ** (db / 20)
     array_to_csv('{}-audio.txt'.format(filename), data)
+    executable_filename = './carfac-cmd'
+    if sys.platform == "win32":
+        executable_filename += '.exe'
     call([
-        './carfac-cmd',
+        executable_filename,
         filename,
         str(len(data)),
         str(ears),

@@ -29,7 +29,7 @@ If you have previously installed an older version of gcc, and you try to run `gc
 * `echo 'export CXX=/usr/bin/g++' >> ~/.bashrc`
 
 ## Get Eigen and SCons
-* `sudo apt-get install libeigen3-dev scons cmake libgtest-dev`
+* `sudo apt-get install libeigen3-dev scons`
 * `echo 'export EIGEN_PATH=/usr/include/eigen3' >> ~/.bashrc`
 
 ## Specify number of cores

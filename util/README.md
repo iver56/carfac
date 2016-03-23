@@ -32,11 +32,6 @@ If you have previously installed an older version of gcc, and you try to run `gc
 * `sudo apt-get install libeigen3-dev scons cmake libgtest-dev`
 * `echo 'export EIGEN_PATH=/usr/include/eigen3' >> ~/.bashrc`
 
-## Get CARFAC
-* `cd /data`
-* `git clone https://github.com/iver56/carfac.git`
-* `echo 'CARFAC_PATH=/data' >> ~/.bashrc`
-
 ## Specify number of cores
 `echo 'OMP_NUM_THREADS=2' >> ~/.bashrc`
 (replace 2 with the number of physical cores if it is not 2)
@@ -49,7 +44,7 @@ If you have previously installed an older version of gcc, and you try to run `gc
 
 ## Install python dependencies
 
-Install numpy, scipy and scikits.samplerate
+Install numpy, [scipy](http://www.scipy.org/install.html) and scikits.samplerate
 
 # Setup (Windows)
 
@@ -61,10 +56,6 @@ This repository includes an executable that is built on Windows 10. You may be a
 * Get Eigen
     * Download http://bitbucket.org/eigen/eigen/get/3.2.8.zip and unzip it to C:\ (or somewhere else)
     * Add environment variable EIGEN_PATH with value C:\eigen-eigen-07105f7124f9 (or your custom path, if applicable)
-
-## Get CARFAC (this repository)
-* `git clone https://github.com/iver56/carfac.git`
-* Add environment variable CARFAC_PATH. The value should be the path to the folder that contains the carfac folder.
 
 ## Specify number of cores
 

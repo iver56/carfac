@@ -16,6 +16,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "sai.h"
 
 SAI::SAI(const SAIParams& params) : SAIBase(params) {

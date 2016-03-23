@@ -75,3 +75,6 @@ This repository includes an executable that is built on Windows 10. You may be a
 * Install numpy and scipy
 * Download scikits.samplerate-0.3.3-cp27-none-win32.whl from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikits.samplerate
 * `pip install scikits.samplerate-0.3.3-cp27-none-win32.whl`
+
+## Build
+Run this command in the MinGW Command Prompt: `scons`

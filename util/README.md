@@ -4,7 +4,7 @@ This utility takes in a wav file and outputs Neural Activity Pattern (NAP) to a 
 
 # How to use the command line utility
 
-* For example: `nap.py drums.wav`
+* For example: `python nap.py drums.wav`
 * The NAP data is now written to the text file drums.wavcochlear
 
 # Setup (Ubuntu)
@@ -12,30 +12,30 @@ This utility takes in a wav file and outputs Neural Activity Pattern (NAP) to a 
 This repository includes an executable that is built on Ubuntu 14.04. You may be able to use that. If you need to build your own, keep reading.
 
 ## Install gcc 4.9
-`sudo apt-get install build-essential`
-`sudo apt-get install software-properties-common`
-`sudo add-apt-repository ppa:ubuntu-toolchain-r/test`
-`sudo apt-get update`
-`sudo apt-get install gcc-4.9 g++-4.9 cpp-4.9`
+* `sudo apt-get install build-essential`
+* `sudo apt-get install software-properties-common`
+* `sudo add-apt-repository ppa:ubuntu-toolchain-r/test`
+* `sudo apt-get update`
+* `sudo apt-get install gcc-4.9 g++-4.9 cpp-4.9`
 
 If you have previously installed an older version of gcc, and you try to run `gcc --version` now, you'll see that it still points to the old version. Let's fix that:
 
-`sudo cd /usr/bin`
-`sudo rm gcc g++ cpp`
-`sudo ln -s gcc-4.9 gcc`
-`sudo ln -s g++-4.9 g++`
-`sudo ln -s cpp-4.9 cpp`
-`echo 'export CC=/usr/bin/gcc' >> ~/.bashrc`
-`echo 'export CXX=/usr/bin/g++' >> ~/.bashrc`
+* `sudo cd /usr/bin`
+* `sudo rm gcc g++ cpp`
+* `sudo ln -s gcc-4.9 gcc`
+* `sudo ln -s g++-4.9 g++`
+* `sudo ln -s cpp-4.9 cpp`
+* `echo 'export CC=/usr/bin/gcc' >> ~/.bashrc`
+* `echo 'export CXX=/usr/bin/g++' >> ~/.bashrc`
 
 ## Get Eigen and SCons
-`sudo apt-get install libeigen3-dev scons cmake libgtest-dev`
-`echo 'export EIGEN_PATH=/usr/include/eigen3' >> ~/.bashrc`
+* `sudo apt-get install libeigen3-dev scons cmake libgtest-dev`
+* `echo 'export EIGEN_PATH=/usr/include/eigen3' >> ~/.bashrc`
 
 ## Get CARFAC
-`cd /data`
-`git clone https://github.com/iver56/carfac.git`
-`echo 'CARFAC_PATH=/data' >> ~/.bashrc`
+* `cd /data`
+* `git clone https://github.com/iver56/carfac.git`
+* `echo 'CARFAC_PATH=/data' >> ~/.bashrc`
 
 ## Specify number of cores
 `echo 'OMP_NUM_THREADS=2' >> ~/.bashrc`

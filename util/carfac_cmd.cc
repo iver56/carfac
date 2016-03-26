@@ -59,7 +59,7 @@ ArrayXX LoadMatrixFromSound(const std::string &filename) {
     int buffer_len = file.frames() * file.channels();
     double *buffer = new double[buffer_len];
 
-    printf("Opened file '%s'\n", filename);
+    //printf("Opened file '%s'\n", filename);
     printf("Sample rate : %d\n", file.samplerate());
     printf("Channels    : %d\n", file.channels());
     printf("Frames      : %d\n", file.frames());

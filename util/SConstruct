@@ -13,13 +13,16 @@ env = Environment(
     ],
     OMP_NUM_THREADS=[os.environ['OMP_NUM_THREADS']],
     LIBPATH=[os.path.join(libsndfile_path, 'lib')],
-    LIBS=['libsndfile-1.lib'],
+    LIBS=['libsndfile-1.lib'] if sys.platform == 'win32' else [],
     TARGET_ARCH='x86_64'
 )
 
 if not sys.platform == "win32":
     env['CC'] = os.environ['CC']
     env['CXX'] = os.environ['CXX']
+    deplibs = ['sndfile']
+    for depname in deplibs:
+        env.ParseConfig('pkg-config --cflags --libs ' + depname)
 
 env.MergeFlags(['-std=c++11 -O3 -DNDEBUG -fopenmp'])
 carfac_sources = [

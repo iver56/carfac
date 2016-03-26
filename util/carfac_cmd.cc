@@ -32,6 +32,8 @@
 #include "common.h"
 #include "ihc.h"
 
+#include <chrono> // used for checking execution time of various functions
+
 using namespace std;
 
 // Reads a size rows by columns Eigen matrix from a text file written
@@ -168,23 +170,62 @@ void WriteNAPOutput(const CARFACOutput &output, const std::string &filename,
 }
 
 int main(int argc, char *argv[]) {
-    CARParams car_params_;
-    IHCParams ihc_params_;
-    AGCParams agc_params_;
-    bool open_loop_;
-    std::string fname = argv[1];
-    //int num_samples = atoi(argv[2]);
-    //int num_ears = atoi(argv[3]);
-    FPType sample_rate = 44100; //atoi(argv[4]);
-    int stride = 256; // atoi(argv[5]);
-    FPType a_1 = -0.995; //atof(argv[6]);
-    int apply_filter = 1; //atoi(argv[7]);
-    std::string suffix = ".cochlear"; //argv[8];
-    ArrayXX sound_data = LoadAudio(fname);
-    int num_ears = 1;
-    CARFAC carfac(num_ears, sample_rate, car_params_, ihc_params_, agc_params_);
-    CARFACOutput output(true, true, false, false);
-    carfac.RunSegment(sound_data, open_loop_, &output);
-    //If you need more ears, this is where to loop it. Change the output filename accordingly.
-    WriteNAPOutput(output, fname + suffix, 0, stride, a_1, apply_filter);
+    chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
+
+        CARParams car_params_;
+        IHCParams ihc_params_;
+        AGCParams agc_params_;
+        bool open_loop_;
+        std::string fname = argv[1];
+        //int num_samples = atoi(argv[2]);
+        //int num_ears = atoi(argv[3]);
+        FPType sample_rate = 44100; //atoi(argv[4]);
+        int stride = 256; // atoi(argv[5]);
+        FPType a_1 = -0.995; //atof(argv[6]);
+        int apply_filter = 1; //atoi(argv[7]);
+        std::string suffix = ".cochlear"; //argv[8];
+        ArrayXX sound_data = LoadAudio(fname);
+
+    chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
+    cout << "init and load audio: " << duration << " ms" << endl;
+
+
+    t1 = chrono::high_resolution_clock::now();
+
+        int num_ears = 1;
+        CARFAC carfac(num_ears, sample_rate, car_params_, ihc_params_, agc_params_);
+
+    t2 = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
+    cout << "init carfac: " << duration << " ms" << endl;
+
+
+    t1 = chrono::high_resolution_clock::now();
+
+        CARFACOutput output(true, true, false, false);
+
+    t2 = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
+    cout << "carfac output: " << duration << " ms" << endl;
+
+
+    t1 = chrono::high_resolution_clock::now();
+
+        carfac.RunSegment(sound_data, open_loop_, &output);
+
+    t2 = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
+    cout << "carfac RunSegment: " << duration << " ms" << endl;
+
+
+    t1 = chrono::high_resolution_clock::now();
+
+        //If you need more ears, this is where to loop it. Change the output filename accordingly.
+        WriteNAPOutput(output, fname + suffix, 0, stride, a_1, apply_filter);
+
+    t2 = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
+    cout << "WriteNAPOutput: " << duration << " ms" << endl;
+
 }

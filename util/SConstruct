@@ -2,8 +2,20 @@ import os
 import sys
 
 carfac_cpp_path = os.path.join(Dir('../').path, 'cpp')
-env = Environment(CPPPATH=[os.environ['EIGEN_PATH'], carfac_cpp_path],
-                  OMP_NUM_THREADS=[os.environ['OMP_NUM_THREADS']])
+libsndfile_path = 'C:\Program Files\Mega-Nerd\libsndfile'  # Windows-specific
+libsndfile_include_path = os.path.join(libsndfile_path, 'include')
+
+env = Environment(
+    CPPPATH=[
+        os.environ['EIGEN_PATH'],
+        carfac_cpp_path,
+        libsndfile_include_path
+    ],
+    OMP_NUM_THREADS=[os.environ['OMP_NUM_THREADS']],
+    LIBPATH=[os.path.join(libsndfile_path, 'lib')],
+    LIBS=['libsndfile-1.lib'],
+    TARGET_ARCH='x86_64'
+)
 
 if not sys.platform == "win32":
     env['CC'] = os.environ['CC']
@@ -19,9 +31,9 @@ carfac_sources = [
 
 carfac = env.Library(target='carfac', source=carfac_sources)
 
-self_dot_sources = carfac_sources + ['carfac_cmd.cc']
-self_dot = env.Program(target='carfac-cmd',
-                       source=self_dot_sources,
-                       LINKFLAGS='-std=c++11 -O3 -DNDEBUG -fopenmp')
+carfac_cmd_sources = carfac_sources + ['carfac_cmd.cc']
+carfac_cmd = env.Program(target='carfac-cmd',
+                         source=carfac_cmd_sources,
+                         LINKFLAGS='-std=c++11 -O3 -DNDEBUG -fopenmp')
 
-Default(self_dot)
+Default(carfac_cmd)

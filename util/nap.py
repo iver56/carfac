@@ -26,6 +26,7 @@ def array_to_csv(filename, data, delimiter=' '):
 def cochlear(filename, stride, rate, db=-40, ears=1, a_1=-0.995, apply_filter=1, suffix='cochlear'):
     original_rate, data = wavfile.read(filename)
     assert data.dtype == np.int16
+    # noinspection PyAugmentAssignment
     data = data / float(2 ** 15)
     if original_rate != rate:
         data = resample(data, float(rate) / original_rate, 'sinc_best')

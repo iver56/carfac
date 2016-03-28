@@ -32,6 +32,9 @@ If you have previously installed an older version of gcc, and you try to run `gc
 * `sudo apt-get install libeigen3-dev scons`
 * `echo 'export EIGEN_PATH=/usr/include/eigen3' >> ~/.bashrc`
 
+## Install libsndfile
+`sudo apt-get install libsndfile-dev`
+
 ## Specify number of cores
 `echo 'OMP_NUM_THREADS=2' >> ~/.bashrc`
 (replace 2 with the number of physical cores if it is not 2)
@@ -60,6 +63,11 @@ This repository includes an executable that is built on Windows 10. You may be a
 ## Specify number of cores
 
 * Create environment variable OMP_NUM_THREADS with value 2 (or the number of physical cores if it is not 2)
+
+## Install libsndfile
+http://www.mega-nerd.com/libsndfile/#Download
+
+If you don't choose the 32-bit version instead of 64 bit, you have to change the libsndfile path in SConstruct
 
 ## Install python dependencies
 

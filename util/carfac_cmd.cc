@@ -34,6 +34,8 @@
 
 #include <chrono> // used for checking execution time of various functions
 
+const bool DEBUG = false;
+
 using namespace std;
 
 // Reads a size rows by columns Eigen matrix from a text file written
@@ -61,11 +63,12 @@ ArrayXX LoadMatrixFromSound(const std::string &filename) {
     int buffer_len = file.frames() * file.channels();
     double *buffer = new double[buffer_len];
 
-    //printf("Opened file '%s'\n", filename);
-    printf("Sample rate : %d\n", file.samplerate());
-    printf("Channels    : %d\n", file.channels());
-    printf("Frames      : %d\n", file.frames());
-
+    if (DEBUG) {
+        //printf("Opened file '%s'\n", filename);
+        printf("Sample rate : %d\n", file.samplerate());
+        printf("Channels    : %d\n", file.channels());
+        printf("Frames      : %d\n", file.frames());
+    }
     if (file.channels() != 1) {
         throw std::runtime_error("File must be mono (1 channel). Multi-channel sound files are not supported");
     }
@@ -134,25 +137,15 @@ void WriteFilterMatrix(const std::string &filename, const ArrayXX &matrix, int s
     for (int i = 0; i < decimated.rows(); i++)
         decimated.row(i) = filtered.row(i * stride);
 
-    std::ofstream ofile(filename.c_str());
     const int kPrecision = 9;
-    ofile.precision(kPrecision);
-    if (ofile.is_open()) {
-        Eigen::IOFormat ioformat(kPrecision, Eigen::DontAlignCols);
-        ofile << decimated.format(ioformat) << std::endl;
-    }
-    ofile.close();
+    Eigen::IOFormat ioformat(kPrecision, Eigen::DontAlignCols);
+    cout << decimated.format(ioformat) << std::endl;
 }
 
 void WriteMatrix(const std::string &filename, const ArrayXX &matrix) {
-    std::ofstream ofile(filename.c_str());
     const int kPrecision = 9;
-    ofile.precision(kPrecision);
-    if (ofile.is_open()) {
-        Eigen::IOFormat ioformat(kPrecision, Eigen::DontAlignCols);
-        ofile << matrix.format(ioformat) << std::endl;
-    }
-    ofile.close();
+    Eigen::IOFormat ioformat(kPrecision, Eigen::DontAlignCols);
+    cout << matrix.format(ioformat) << std::endl;
 }
 
 ArrayXX LoadAudio(const std::string &filename) {
@@ -187,9 +180,10 @@ int main(int argc, char *argv[]) {
         ArrayXX sound_data = LoadAudio(fname);
 
     chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
-    cout << "init and load audio: " << duration << " ms" << endl;
-
+    auto duration = chrono::duration_cast<chrono::microseconds>(t2 - t1).count() / 1000.0;
+    if (DEBUG) {
+        cout << "init and load audio: " << duration << " ms" << endl;
+    }
 
     t1 = chrono::high_resolution_clock::now();
 
@@ -197,27 +191,30 @@ int main(int argc, char *argv[]) {
         CARFAC carfac(num_ears, sample_rate, car_params_, ihc_params_, agc_params_);
 
     t2 = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
-    cout << "init carfac: " << duration << " ms" << endl;
-
+    duration = chrono::duration_cast<chrono::microseconds>(t2 - t1).count() / 1000.0;
+    if (DEBUG) {
+        cout << "init carfac: " << duration << " ms" << endl;
+    }
 
     t1 = chrono::high_resolution_clock::now();
 
         CARFACOutput output(true, true, false, false);
 
     t2 = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
-    cout << "carfac output: " << duration << " ms" << endl;
-
+    duration = chrono::duration_cast<chrono::microseconds>(t2 - t1).count() / 1000.0;
+    if (DEBUG) {
+        cout << "carfac output: " << duration << " ms" << endl;
+    }
 
     t1 = chrono::high_resolution_clock::now();
 
         carfac.RunSegment(sound_data, open_loop_, &output);
 
     t2 = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
-    cout << "carfac RunSegment: " << duration << " ms" << endl;
-
+    duration = chrono::duration_cast<chrono::microseconds>(t2 - t1).count() / 1000.0;
+    if (DEBUG) {
+        cout << "carfac RunSegment: " << duration << " ms" << endl;
+    }
 
     t1 = chrono::high_resolution_clock::now();
 
@@ -225,7 +222,8 @@ int main(int argc, char *argv[]) {
         WriteNAPOutput(output, fname + suffix, 0, stride, a_1, apply_filter);
 
     t2 = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count() / 1000.0;
-    cout << "WriteNAPOutput: " << duration << " ms" << endl;
-
+    duration = chrono::duration_cast<chrono::microseconds>(t2 - t1).count() / 1000.0;
+    if (DEBUG) {
+        cout << "WriteNAPOutput: " << duration << " ms" << endl;
+    }
 }

@@ -2,6 +2,8 @@
 
 This utility takes in a wav file and outputs Neural Activity Pattern (NAP) to a text file
 
+![NAP](example_nap.png)
+
 # How to use the command line utility
 
 * For example: `python nap.py drums.wav`
